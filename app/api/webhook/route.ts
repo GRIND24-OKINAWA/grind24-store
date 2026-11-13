@@ -9,7 +9,7 @@ export async function POST(req:NextRequest){
  if(event.type==='checkout.session.completed'||event.type==='checkout.session.async_payment_succeeded'){
   const s=event.data.object as Stripe.Checkout.Session;
   if(s.payment_status==='paid'&&s.metadata?.order_id){
-   const {error}=await database.rpc('mark_order_paid',{p_order_id:s.metadata.order_id,p_email:s.customer_details?.email||'',p_name:s.customer_details?.name||'',p_phone:s.customer_details?.phone||'',p_address:s.shipping_details?JSON.stringify(s.shipping_details.address):null,p_session_id:s.id});
+   const {error}=await database.rpc('mark_order_paid',{p_order_id:s.metadata.order_id,p_email:s.customer_details?.email||'',p_name:s.customer_details?.name||'',p_phone:s.customer_details?.phone||'',p_address:s.shipping_details?JSON.stringify(s.collected_information?.shipping_details):null,p_session_id:s.id});
    if(error){console.error(error);return new NextResponse('Database error',{status:500})}
   }
  }
