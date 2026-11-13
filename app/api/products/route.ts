@@ -12,7 +12,7 @@ export async function GET() {
   if (error) {
     console.error("Products error:", error.message);
     return NextResponse.json(
-      { error: "商品を取得できません" },
+      { error: error.message },
       { status: 500 }
     );
   }
